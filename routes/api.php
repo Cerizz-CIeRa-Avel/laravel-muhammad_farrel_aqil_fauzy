@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 // Public Routes (Tidak perlu token)
 Route::post('/register', [AuthController::class, 'register']);
@@ -51,4 +52,9 @@ Route::middleware('auth:sanctum')->group(function () {
             return response()->json(['message' => 'Ini profil Customer']);
         });
     });
+
+    Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+    return response()->json(['message' => 'Email berhasil diverifikasi.']);
+    })->middleware(['auth:sanctum', 'signed'])->name('verification.verify');
 });
